@@ -5,12 +5,11 @@ import process.MyProcess;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class FirstComeFirstServed implements Scheduler {
+public class RoundRobin implements Scheduler {
     Queue<MyProcess> q;
 
-    public FirstComeFirstServed() {
+    public RoundRobin() {
         q = new LinkedList<>();
-
     }
 
     @Override

@@ -5,15 +5,15 @@ import process.ProcessPriorityComparator;
 
 import java.util.PriorityQueue;
 
-public class PriorityNonPreemptive implements Scheduler {
+public class PriorityScheduler implements Scheduler {
     PriorityQueue<MyProcess> pq;
 
-    public PriorityNonPreemptive() {
+    public PriorityScheduler() {
         pq = new PriorityQueue<>(new ProcessPriorityComparator());
     }
 
     @Override
-    public MyProcess serve() {
+    public MyProcess pop() {
         return pq.poll();
     }
 
@@ -25,5 +25,10 @@ public class PriorityNonPreemptive implements Scheduler {
     @Override
     public void addProcess(MyProcess p) {
         pq.add(p);
+    }
+
+    @Override
+    public MyProcess peek() {
+        return pq.peek();
     }
 }
