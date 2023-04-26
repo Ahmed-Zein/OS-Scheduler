@@ -32,4 +32,9 @@ public class FirstComeFirstServed implements Scheduler {
     public MyProcess peek() {
         return q.peek();
     }
+
+    @Override
+    public int size() {
+        return q.size();
+    }
 }

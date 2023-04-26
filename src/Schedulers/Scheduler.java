@@ -10,4 +10,6 @@ public interface Scheduler {
     void addProcess(MyProcess p);
 
     MyProcess peek();
+
+    int size();
 }

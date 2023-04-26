@@ -41,4 +41,9 @@ public class ShortestJobFirstScheduler implements Scheduler {
     public MyProcess peek() {
         return pq.peek();
     }
+
+    @Override
+    public int size() {
+        return pq.size();
+    }
 }

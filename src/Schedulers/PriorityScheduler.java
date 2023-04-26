@@ -6,7 +6,7 @@ import process.ProcessPriorityComparator;
 import java.util.PriorityQueue;
 
 public class PriorityScheduler implements Scheduler {
-    PriorityQueue<MyProcess> pq;
+    private PriorityQueue<MyProcess> pq;
 
     public PriorityScheduler() {
         pq = new PriorityQueue<>(new ProcessPriorityComparator());
@@ -30,5 +30,10 @@ public class PriorityScheduler implements Scheduler {
     @Override
     public MyProcess peek() {
         return pq.peek();
+    }
+
+    @Override
+    public int size() {
+        return pq.size();
     }
 }
