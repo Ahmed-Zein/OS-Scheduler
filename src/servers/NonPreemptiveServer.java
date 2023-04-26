@@ -1,5 +1,6 @@
-package Schedulers;
+package servers;
 
+import Schedulers.Scheduler;
 import process.MyProcess;
 
 public class NonPreemptiveServer extends Server {
@@ -12,8 +13,7 @@ public class NonPreemptiveServer extends Server {
     }
 
     public void serve() {
-        this.serve();
-        if (super.getScheduler().isEmpty()) return;
+         if (super.getScheduler().isEmpty()) return;
         MyProcess p = super.getScheduler().peek();
         try {
             Thread.sleep(p.getBurstTime() * 1000);

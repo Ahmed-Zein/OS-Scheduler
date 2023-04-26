@@ -1,17 +1,14 @@
 package UI;
 
-import Schedulers.Server;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import process.MyProcess;
+import servers.Server;
 
 public class SayMyName {
     // Create new stage
@@ -42,17 +39,22 @@ public class SayMyName {
         VBox root = new VBox();
         HBox upperContainer = new HBox();
         HBox grantChart = new HBox();
+        HBox schedulerControllers = new HBox();
+        Button startBtn = new Button("Start");
+        Button pauseBtn = new Button("Pause");  // ??????????
         Button addProcessBtn = new Button("Add Process");
         HBox processCreatorPanel = new HBox();
-
         Label noOfProcess = new Label("current number of processes: " + server.getScheduler().size());
         LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
         LabeledTxtField priority = new LabeledTxtField("Set priority");
+        TimeLine timeLine = new TimeLine(Color.AZURE);
 
         processCreatorPanel.getChildren().addAll(burstTime.build(), priority.build());
 
         upperContainer.getChildren().addAll(processCreatorPanel, noOfProcess, addProcessBtn);
 
+        schedulerControllers.getChildren().addAll(startBtn, pauseBtn);
+        grantChart.getChildren().addAll(timeLine.build());
         addProcessBtn.setOnAction(e -> {
             MyProcess p = new MyProcess();
 
@@ -66,8 +68,15 @@ public class SayMyName {
                 priority.clear();
             }
         });
+        startBtn.setOnAction(e -> {
+            timeLine.startTimeLine();
+        });
+        pauseBtn.setOnAction(e -> {
+            //todo
+            timeLine.changeColor();
+        });
 
-        root.getChildren().addAll(upperContainer, grantChart);
+        root.getChildren().addAll(upperContainer, schedulerControllers, grantChart);
         // Create new scene with root node
         Scene newScene = new Scene(root);
         stage.setScene(newScene);
@@ -79,39 +88,6 @@ public class SayMyName {
 
     public Stage getStage() {
         return stage;
-    }
-
-}
-
-class LabeledTxtField {
-    Label lbl;
-    TextField textField;
-
-    LabeledTxtField(String label) {
-        lbl = new Label(label);
-        textField = new TextField();
-
-        // Create a TextFormatter that only allows integers
-        StringConverter<Integer> converter = new IntegerStringConverter();
-        TextFormatter<Integer> formatter = new TextFormatter<>(converter, 0, c ->
-                c.getControlNewText().matches("\\d*") ? c : null);
-
-        // Set the TextFormatter on the TextField
-        textField.setTextFormatter(formatter);
-    }
-
-    VBox build() {
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(lbl, textField);
-        return vBox;
-    }
-
-    int data() {
-        return Integer.parseInt(textField.getText());
-    }
-
-    void clear() {
-        textField.setText("0");
     }
 
 }

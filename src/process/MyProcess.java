@@ -1,5 +1,7 @@
 package process;
 
+import javafx.scene.paint.Color;
+
 import java.util.UUID;
 
 public class MyProcess {
@@ -8,12 +10,16 @@ public class MyProcess {
     private int burstTime; //
     private int priority;   // 1 : 5
     private ProcessState state;
+    private Color color;
+
 
     public MyProcess() {
         this.pid = UUID.randomUUID();
         this.arriveTime = System.currentTimeMillis();
-        burstTime = 1;
-        priority = 5;
+        this.burstTime = 1;
+        this.priority = 5;
+        this.state = ProcessState.ready;
+        this.color = Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
     }
 
     public UUID getPid() {
@@ -30,6 +36,10 @@ public class MyProcess {
 
     public void setArriveTime(long arriveTime) {
         this.arriveTime = arriveTime;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public int getBurstTime() {
@@ -54,5 +64,9 @@ public class MyProcess {
 
     public void setState(ProcessState state) {
         this.state = state;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
