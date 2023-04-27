@@ -1,11 +1,26 @@
 package servers;
 
 import Schedulers.Scheduler;
+import oserver.Observable;
 import process.MyProcess;
 
 public abstract class Server implements Runnable {
     private Scheduler scheduler;
-     public MyProcess currentlyExecuting;
+    private MyProcess currentlyExecuting;
+
+    public Observable getObservable() {
+        return observable;
+    }
+
+    private Observable observable;
+
+    public Server(Scheduler scheduler) {
+        this.scheduler = scheduler;
+        this.observable = new Observable();
+    }
+
+    public Server() {
+    }
 
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
@@ -19,7 +34,8 @@ public abstract class Server implements Runnable {
     }
 
     public void updateCurrentlyExecuting() {
-        this.currentlyExecuting =  scheduler.peek();
+        this.currentlyExecuting = scheduler.peek();
+        observable.update(currentlyExecuting);
     }
 
     public MyProcess getCurrentlyExecuting() {

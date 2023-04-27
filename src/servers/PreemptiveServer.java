@@ -7,10 +7,11 @@ import static java.lang.Math.ceil;
 public class PreemptiveServer extends Server {
 
     public PreemptiveServer(Scheduler scheduler) {
-        setScheduler(scheduler);
+        super(scheduler);
     }
 
     private PreemptiveServer() {
+        super();
     }
 
     @Override
@@ -43,7 +44,9 @@ public class PreemptiveServer extends Server {
     @Override
     public void run() {
         System.out.println("I am running");
+        //todo: start the time line
         this.serve();
+        //todo: stop the time line
 
     }
 

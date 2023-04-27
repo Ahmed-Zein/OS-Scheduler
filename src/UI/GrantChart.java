@@ -8,8 +8,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import oserver.Observer;
+import process.MyProcess;
 
-class TimeLine {
+class GrantChart implements Observer {
 
     private Pane root;
     private Timeline timeline;
@@ -17,12 +19,12 @@ class TimeLine {
     private ScrollPane scrollPane;
     private Color color;
 
-    public TimeLine(Color color) {
+    public GrantChart(Color color) {
         this.color = color;
         init();
     }
 
-    private TimeLine() {
+    private GrantChart() {
         this.color = Color.ROSYBROWN;
         init();
     }
@@ -71,5 +73,10 @@ class TimeLine {
 
     ScrollPane build() {
         return scrollPane;
+    }
+
+    @Override
+    public void update(MyProcess p) {
+        this.color = p.getColor();
     }
 }

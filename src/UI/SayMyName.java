@@ -14,12 +14,14 @@ public class SayMyName {
     // Create new stage
     private Stage stage;
     private Server server;
+    private Thread thread;
 
     private SayMyName() {
     }
 
     public SayMyName(Server server) {
         this.server = server;
+        thread = new Thread(server);
         init();
     }
 
@@ -29,35 +31,40 @@ public class SayMyName {
      * |   ##            |   |
      * -----------------------
      * |   ## ##             |
+     * -----------------------
      * |                     |
+     * |       chart         |
      * |                     |
      * -----------------------
      */
     private void init() {
         stage = new Stage();
-        // Create root node for new scene
+        // Create root node for the scene
         VBox root = new VBox();
+
+        // upper half of the scene
         HBox upperContainer = new HBox();
-        HBox grantChart = new HBox();
+        Label noOfProcess = new Label("current number of processes: " + server.getScheduler().size());
+        Button addProcessBtn = new Button("Add Process");
+        LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
+        LabeledTxtField priority = new LabeledTxtField("Set priority");
+
+        // second half
+        VBox lowerContainer = new VBox();
         HBox schedulerControllers = new HBox();
         Button startBtn = new Button("Start");
         Button pauseBtn = new Button("Pause");  // ??????????
-        Button addProcessBtn = new Button("Add Process");
         HBox processCreatorPanel = new HBox();
-        Label noOfProcess = new Label("current number of processes: " + server.getScheduler().size());
-        LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
-        LabeledTxtField priority = new LabeledTxtField("Set priority");
-        TimeLine timeLine = new TimeLine(Color.AZURE);
-
+        GrantChart chart = new GrantChart(Color.AZURE);
+        server.getObservable().addObserver(chart);
         processCreatorPanel.getChildren().addAll(burstTime.build(), priority.build());
 
         upperContainer.getChildren().addAll(processCreatorPanel, noOfProcess, addProcessBtn);
 
         schedulerControllers.getChildren().addAll(startBtn, pauseBtn);
-        grantChart.getChildren().addAll(timeLine.build());
+        lowerContainer.getChildren().addAll(schedulerControllers, chart.build());
         addProcessBtn.setOnAction(e -> {
             MyProcess p = new MyProcess();
-
             if (burstTime.data() > 0 && priority.data() > 0) {
                 p.setBurstTime(burstTime.data());
                 p.setPriority(priority.data());
@@ -69,14 +76,18 @@ public class SayMyName {
             }
         });
         startBtn.setOnAction(e -> {
-            timeLine.startTimeLine();
-        });
-        pauseBtn.setOnAction(e -> {
-            //todo
-            timeLine.changeColor();
+            //todo start the server
+            chart.startTimeLine();
+
+            thread.start();
         });
 
-        root.getChildren().addAll(upperContainer, schedulerControllers, grantChart);
+        pauseBtn.setOnAction(e -> {
+            //todo may be un necessary
+            chart.changeColor();
+        });
+
+        root.getChildren().addAll(upperContainer, schedulerControllers, lowerContainer);
         // Create new scene with root node
         Scene newScene = new Scene(root);
         stage.setScene(newScene);
