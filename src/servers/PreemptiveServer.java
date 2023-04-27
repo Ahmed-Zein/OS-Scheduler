@@ -46,6 +46,7 @@ public class PreemptiveServer extends Server {
         System.out.println("I am running");
         //todo: start the time line
         this.serve();
+        super.getObservable().update(null);
         //todo: stop the time line
 
     }

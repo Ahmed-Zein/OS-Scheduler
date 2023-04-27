@@ -77,6 +77,10 @@ class GrantChart implements Observer {
 
     @Override
     public void update(MyProcess p) {
+        if (p==null) {
+            timeline.stop();
+            return;
+        }
         this.color = p.getColor();
     }
 }

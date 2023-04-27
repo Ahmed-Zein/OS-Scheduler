@@ -34,6 +34,10 @@ public abstract class Server implements Runnable {
     }
 
     public void updateCurrentlyExecuting() {
+        if(scheduler.isEmpty()) {
+            observable.update(null);
+            return;
+        }
         this.currentlyExecuting = scheduler.peek();
         observable.update(currentlyExecuting);
     }
