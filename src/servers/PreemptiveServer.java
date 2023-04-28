@@ -25,7 +25,7 @@ public class PreemptiveServer extends Server {
             System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
             int waitingQuantum = 100 * super.getCurrentlyExecuting().getBurstTime();
             int counter = 0;
-            while (waitingQuantum-- >= 0) {
+            while (waitingQuantum-- > 0) {
                 if (super.getCurrentlyExecuting().getPid().equals(super.getScheduler().peek().getPid()))
                     try {
                         counter++;

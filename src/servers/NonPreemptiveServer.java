@@ -25,9 +25,6 @@ public class NonPreemptiveServer extends Server {
             if (super.getScheduler() instanceof RoundRobin)
                 roundRobinExecute();
             else execute();
-//            execute();
-            System.out.println("FINISHED");
-//            super.pop();
         }
         return;
     }
@@ -53,6 +50,7 @@ public class NonPreemptiveServer extends Server {
     }
 
     private void execute() {
+        System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
         try {
             int burstTime = super.getCurrentlyExecuting().getBurstTime();
             while (burstTime-- > 0) {
@@ -61,6 +59,8 @@ public class NonPreemptiveServer extends Server {
                     GrantChart.instance().addRectangleManually();
                 });
             }
+            super.pop();
+            System.out.println("FINISHED");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

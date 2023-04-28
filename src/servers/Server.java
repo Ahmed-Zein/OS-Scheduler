@@ -16,6 +16,7 @@ public abstract class Server implements Runnable {
     }
 
     public Server(Scheduler scheduler) {
+        System.out.println(scheduler.toString());
         this.scheduler = scheduler;
         observers = new Observable();
     }

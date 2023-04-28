@@ -80,16 +80,22 @@ public class Main extends Application {
             switch (selectedRadioButton.getText()) {
                 case "First Come First Served":
                     server = new NonPreemptiveServer(new FirstComeFirstServed());
+                    break;
                 case "Priority Preemptive":
                     server = new PreemptiveServer(new PriorityScheduler());
+                    break;
                 case "Priority Nob-Preemptive":
-                    server = new PreemptiveServer(new PriorityScheduler());
+                    server = new NonPreemptiveServer(new PriorityScheduler());
+                    break;
                 case "Shortest Job First Nob-Preemptive":
                     server = new NonPreemptiveServer(new ShortestJobFirstScheduler());
+                    break;
                 case "Shortest Job First Preemptive":
                     server = new PreemptiveServer(new ShortestJobFirstScheduler());
+                    break;
                 case "Round robin":
                     server = new NonPreemptiveServer(new RoundRobin());
+                    break;
             }
             return true;
         }
