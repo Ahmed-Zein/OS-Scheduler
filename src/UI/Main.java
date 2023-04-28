@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import servers.NonPreemptiveServer;
 import servers.PreemptiveServer;
+import servers.RoundRobinServer;
 import servers.Server;
 
 public class Main extends Application {
@@ -94,7 +95,7 @@ public class Main extends Application {
                     server = new PreemptiveServer(new ShortestJobFirstScheduler());
                     break;
                 case "Round robin":
-                    server = new NonPreemptiveServer(new RoundRobin());
+                    server = new RoundRobinServer(new RoundRobin());
                     break;
             }
             return true;
