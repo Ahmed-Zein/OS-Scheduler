@@ -3,6 +3,7 @@ package servers;
 import Schedulers.Scheduler;
 import UI.GrantChart;
 import javafx.application.Platform;
+import process.ProcessState;
 
 import static java.lang.Math.floor;
 
@@ -24,7 +25,6 @@ public class PreemptiveServer extends Server {
             System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
             int waitingQuantum = 100 * super.getCurrentlyExecuting().getBurstTime();
             int counter = 0;
-
             while (waitingQuantum-- >= 0) {
                 if (super.getCurrentlyExecuting().getPid().equals(super.getScheduler().peek().getPid()))
                     try {
@@ -41,6 +41,7 @@ public class PreemptiveServer extends Server {
                     }
                 else {
                     System.out.println("A higher process has come " + "last process remaining time " + waitingQuantum / 100);
+                    super.getCurrentlyExecuting().setState(ProcessState.ready);
                     super.getCurrentlyExecuting().setBurstTime((int) floor(waitingQuantum / 100));
                     super.updateCurrentlyExecuting();
                     waitingQuantum = 100 * super.getCurrentlyExecuting().getBurstTime();
@@ -48,7 +49,7 @@ public class PreemptiveServer extends Server {
                 }
             }
             System.out.println("FINISHED");
-            super.getScheduler().pop();
+            super.pop();
             if (super.getScheduler().isEmpty())
                 return;
         }

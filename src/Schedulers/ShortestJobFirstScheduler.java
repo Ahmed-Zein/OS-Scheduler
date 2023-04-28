@@ -43,6 +43,11 @@ public class ShortestJobFirstScheduler implements Scheduler {
     }
 
     @Override
+    public PriorityQueue<MyProcess> getProcesses() {
+        return pq;
+    }
+
+    @Override
     public int size() {
         return pq.size();
     }

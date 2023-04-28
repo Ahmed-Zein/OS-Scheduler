@@ -1,6 +1,9 @@
 package UI;
 
-import Schedulers.*;
+import Schedulers.FirstComeFirstServed;
+import Schedulers.PriorityScheduler;
+import Schedulers.RoundRobin;
+import Schedulers.ShortestJobFirstScheduler;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -31,7 +34,6 @@ public class Main extends Application {
 
         // Create a toggle group for the radio buttons
         ToggleGroup toggleGroup = new ToggleGroup();
-
 
         Label selectionLabel = new Label("chose your agent");
         Label warningLabel = new Label(null);
@@ -65,7 +67,6 @@ public class Main extends Application {
             }
 
         });
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
@@ -88,7 +89,7 @@ public class Main extends Application {
                 case "Shortest Job First Preemptive":
                     server = new PreemptiveServer(new ShortestJobFirstScheduler());
                 case "Round robin":
-                    //todo
+                    server = new NonPreemptiveServer(new RoundRobin());
             }
             return true;
         }

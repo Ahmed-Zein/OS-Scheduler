@@ -1,7 +1,5 @@
 package oserver;
 
-import process.MyProcess;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +14,9 @@ public class Observable {
         this.observers .remove(channel);
     }
 
-    public void update(MyProcess p) {
+    public void update( ) {
         for (Observer observer : this.observers) {
-            observer.update(p);
+            observer.update();
         }
     }
 }

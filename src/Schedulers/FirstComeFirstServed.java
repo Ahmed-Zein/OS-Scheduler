@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class FirstComeFirstServed implements Scheduler {
-    Queue<MyProcess> q;
+    private Queue<MyProcess> q;
 
     public FirstComeFirstServed() {
         q = new LinkedList<>();
@@ -31,6 +31,11 @@ public class FirstComeFirstServed implements Scheduler {
     @Override
     public MyProcess peek() {
         return q.peek();
+    }
+
+    @Override
+    public Queue<MyProcess> getProcesses() {
+        return q;
     }
 
     @Override

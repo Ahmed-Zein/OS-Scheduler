@@ -33,7 +33,13 @@ public class RoundRobin implements Scheduler {
     }
 
     @Override
+    public Queue<MyProcess> getProcesses() {
+        return q;
+    }
+
+    @Override
     public int size() {
         return q.size();
     }
+
 }
