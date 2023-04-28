@@ -1,7 +1,8 @@
 package servers;
 
 import Schedulers.Scheduler;
-import process.MyProcess;
+import UI.GrantChart;
+import javafx.application.Platform;
 
 public class NonPreemptiveServer extends Server {
 
@@ -13,15 +14,22 @@ public class NonPreemptiveServer extends Server {
     }
 
     public void serve() {
-         if (super.getScheduler().isEmpty()) return;
-        MyProcess p = super.getScheduler().peek();
-        try {
-            Thread.sleep(p.getBurstTime() * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (!super.getScheduler().isEmpty()) {
+            super.updateCurrentlyExecuting();
+            try {
+                int burstTime = super.getCurrentlyExecuting().getBurstTime();
+                while (burstTime-- > 0) {
+                    Thread.sleep(1000);
+                    Platform.runLater(() -> {
+                        GrantChart.instance().addRectangleManually();
+                    });
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("FINISHED");
+            super.getScheduler().pop();
         }
-        System.out.println("FINISHED");
-        super.getScheduler().pop();
         return;
     }
 

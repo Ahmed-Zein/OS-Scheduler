@@ -1,22 +1,15 @@
 package servers;
 
 import Schedulers.Scheduler;
-import oserver.Observable;
+import UI.GrantChart;
 import process.MyProcess;
 
 public abstract class Server implements Runnable {
     private Scheduler scheduler;
     private MyProcess currentlyExecuting;
 
-    public Observable getObservable() {
-        return observable;
-    }
-
-    private Observable observable;
-
     public Server(Scheduler scheduler) {
         this.scheduler = scheduler;
-        this.observable = new Observable();
     }
 
     public Server() {
@@ -34,12 +27,11 @@ public abstract class Server implements Runnable {
     }
 
     public void updateCurrentlyExecuting() {
-        if(scheduler.isEmpty()) {
-            observable.update(null);
+        if (scheduler.isEmpty()) {
             return;
         }
         this.currentlyExecuting = scheduler.peek();
-        observable.update(currentlyExecuting);
+        GrantChart.instance().changeColor(currentlyExecuting.getColor());
     }
 
     public MyProcess getCurrentlyExecuting() {

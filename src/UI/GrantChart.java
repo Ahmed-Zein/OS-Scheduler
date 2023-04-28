@@ -8,20 +8,30 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import oserver.Observer;
-import process.MyProcess;
 
-class GrantChart implements Observer {
+public class GrantChart {
 
     private Pane root;
     private Timeline timeline;
     private int count = 0;
     private ScrollPane scrollPane;
     private Color color;
+    private static GrantChart chart;
 
-    public GrantChart(Color color) {
+    private GrantChart(Color color) {
         this.color = color;
         init();
+    }
+
+    public static GrantChart instance() {
+        if (chart == null) {
+            synchronized (GrantChart.class) {
+                if (chart == null) {
+                    chart = new GrantChart();
+                }
+            }
+        }
+        return chart;
     }
 
     private GrantChart() {
@@ -59,6 +69,10 @@ class GrantChart implements Observer {
         count++;
     }
 
+    public void addRectangleManually() {
+        addRectangle();
+    }
+
     public void startTimeLine() {
         timeline.play();
     }
@@ -67,20 +81,12 @@ class GrantChart implements Observer {
         timeline.pause();
     }
 
-    public void changeColor() {
-        color = Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
+    public void changeColor(Color color) {
+        this.color = color;
     }
 
     ScrollPane build() {
         return scrollPane;
     }
 
-    @Override
-    public void update(MyProcess p) {
-        if (p==null) {
-            timeline.stop();
-            return;
-        }
-        this.color = p.getColor();
-    }
 }

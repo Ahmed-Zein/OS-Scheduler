@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import process.MyProcess;
 import servers.Server;
@@ -55,8 +54,8 @@ public class SayMyName {
         Button startBtn = new Button("Start");
         Button pauseBtn = new Button("Pause");  // ??????????
         HBox processCreatorPanel = new HBox();
-        GrantChart chart = new GrantChart(Color.AZURE);
-        server.getObservable().addObserver(chart);
+        GrantChart chart = GrantChart.instance();
+
         processCreatorPanel.getChildren().addAll(burstTime.build(), priority.build());
 
         upperContainer.getChildren().addAll(processCreatorPanel, noOfProcess, addProcessBtn);
@@ -77,14 +76,14 @@ public class SayMyName {
         });
         startBtn.setOnAction(e -> {
             //todo start the server
-            chart.startTimeLine();
-
-            thread.start();
+            if (!thread.isAlive())
+                thread.start();
+            thread = new Thread(server);
         });
 
         pauseBtn.setOnAction(e -> {
             //todo may be un necessary
-            chart.changeColor();
+//            chart.changeColor(p.);
         });
 
         root.getChildren().addAll(upperContainer, schedulerControllers, lowerContainer);
