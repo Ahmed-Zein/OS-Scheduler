@@ -5,8 +5,6 @@ import UI.GrantChart;
 import javafx.application.Platform;
 import process.ProcessState;
 
-import static java.lang.Math.floor;
-
 public class PreemptiveServer extends Server {
 
     public PreemptiveServer(Scheduler scheduler) {
@@ -23,7 +21,7 @@ public class PreemptiveServer extends Server {
         while (!super.getScheduler().isEmpty()) {
             super.updateCurrentlyExecuting();
             System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
-            int waitingQuantum = 100 * super.getCurrentlyExecuting().getBurstTime();
+            int waitingQuantum = 100 * super.getCurrentlyExecuting().getRemainingTime();
             int counter = 0;
             while (waitingQuantum-- > 0) {
                 if (super.getCurrentlyExecuting().getPid().equals(super.getScheduler().peek().getPid()))
@@ -32,7 +30,7 @@ public class PreemptiveServer extends Server {
                         Thread.sleep(10);
                         if (counter == 100) {
                             counter = 0;
-                            getCurrentlyExecuting().setBurstTime(getCurrentlyExecuting().getBurstTime()-1);
+                            getCurrentlyExecuting().setRemainingTime(getCurrentlyExecuting().getRemainingTime() - 1);
                             getObservers().update();
                             Platform.runLater(() -> {
                                 GrantChart.instance().addRectangleManually();
@@ -45,7 +43,7 @@ public class PreemptiveServer extends Server {
                     System.out.println("A higher process has come " + "last process remaining time " + waitingQuantum / 100);
                     super.getCurrentlyExecuting().setState(ProcessState.ready);
                     super.updateCurrentlyExecuting();
-                    waitingQuantum = 100 * super.getCurrentlyExecuting().getBurstTime();
+                    waitingQuantum = 100 * super.getCurrentlyExecuting().getRemainingTime();
                     counter = 0;
                 }
             }
@@ -56,12 +54,28 @@ public class PreemptiveServer extends Server {
         }
         return;
     }
+//
+//    @Override
+//    public float calcTurnAroundTime() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public float calcAvgWaitingTime() {
+//        return 0;
+//    }
 
     @Override
     public void run() {
         System.out.println("server starting");
+        setServerStartTime(System.currentTimeMillis());
+        super.setRunning(true);
         this.serve();
+        System.out.println(calcAvgWaitingTime());
+        System.out.println(calcTurnAroundTime());
         System.out.println("server shutdown");
+        super.finishedList.clear();
+        super.setRunning(false);
     }
 
 }

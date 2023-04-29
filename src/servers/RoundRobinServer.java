@@ -24,6 +24,16 @@ public class RoundRobinServer extends Server {
         return;
     }
 
+//    @Override
+//    public float calcTurnAroundTime() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public float calcAvgWaitingTime() {
+//        return 0;
+//    }
+
     private void execute() {
         super.updateCurrentlyExecuting();
         System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
@@ -38,10 +48,10 @@ public class RoundRobinServer extends Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        p.setBurstTime(p.getBurstTime() - 1);
+        p.setRemainingTime(p.getRemainingTime() - 1);
         super.pop();
 
-        if (p.getBurstTime() != 0) {
+        if (p.getRemainingTime() != 0) {
             p.setState(ProcessState.ready);
             sleep(10);
             super.push(p);
@@ -59,6 +69,13 @@ public class RoundRobinServer extends Server {
 
     @Override
     public void run() {
+        System.out.println("server starting");
+        setServerStartTime(System.currentTimeMillis());
+        super.setRunning(true);
         this.serve();
+        System.out.println(calcAvgWaitingTime());
+        System.out.println(calcTurnAroundTime());
+        System.out.println("server shutdown");
+        super.setRunning(false);
     }
 }

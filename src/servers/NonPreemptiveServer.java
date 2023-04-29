@@ -14,7 +14,7 @@ public class NonPreemptiveServer extends Server {
         super();
     }
 
-
+    @Override
     public void serve() {
         while (!super.getScheduler().isEmpty()) {
             execute();
@@ -22,11 +22,21 @@ public class NonPreemptiveServer extends Server {
         return;
     }
 
+//    @Override
+//    public float calcTurnAroundTime() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public float calcAvgWaitingTime() {
+//        return 0;
+//    }
+
     private void execute() {
         super.updateCurrentlyExecuting();
         System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
         try {
-            int burstTime = super.getCurrentlyExecuting().getBurstTime();
+            int burstTime = super.getCurrentlyExecuting().getRemainingTime();
             while (burstTime-- > 0) {
                 Thread.sleep(1000);
                 Platform.runLater(() -> {
@@ -42,6 +52,14 @@ public class NonPreemptiveServer extends Server {
 
     @Override
     public void run() {
+        System.out.println("server starting");
+        setServerStartTime(System.currentTimeMillis());
+        super.setRunning(true);
         this.serve();
+        System.out.println(calcAvgWaitingTime());
+        System.out.println(calcTurnAroundTime());
+        super.finishedList.clear();
+        System.out.println("server shutdown");
+        super.setRunning(false);
     }
 }

@@ -16,13 +16,13 @@ public class T4test {
             while (t-- > 0) ;
             MyProcess p = new MyProcess();
             p.setPriority(3);
-            p.setBurstTime(10);
+            p.setRemainingTime(10);
             s.addProcess(p);
         }
         thread.start();
         MyProcess p = new MyProcess();
         p.setPriority(1);
-        p.setBurstTime(9);
+        p.setRemainingTime(9);
         System.out.println("thread starts");
         System.out.println("process added");
         try {
