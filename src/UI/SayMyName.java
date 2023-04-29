@@ -1,6 +1,5 @@
 package UI;
 
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -51,23 +50,24 @@ public class SayMyName {
         ProcessCreator processCreator = new ProcessCreator(server, showPriority);
         ProcessTableView processTable = new ProcessTableView(server.getScheduler().getProcesses(), showPriority);
         Button startBtn = new Button("Start");
-        HBox startBox = new HBox(startBtn);
+        HBox btnBox = new HBox(startBtn);
         GrantChart chart = GrantChart.instance();
 
         server.getObservers().addObserver(processTable);
 
         startBtn.setOnAction(e -> {
+
             processTable.updateData();
             SayMyName.startTime = System.currentTimeMillis();
             if (!thread.isAlive())
+            if (!server.isRunning())
                 thread.start();
             thread = new Thread(server);
         });
 
-        root.getChildren().addAll(processCreator.build(), processTable.build(), startBox, chart.build());
+        root.getChildren().addAll(processCreator.build(), processTable.build(), btnBox, chart.build());
 
         root.setStyle("-fx-background-color: #f4f4f4; -fx-padding: 10px; -fx-spacing: 10px;");
-        HBox.setMargin(startBox, new Insets(15, 0, 0, 0));
 
         buildScene();
     }

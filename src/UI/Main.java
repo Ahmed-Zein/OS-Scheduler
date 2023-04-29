@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import servers.NonPreemptiveServer;
 import servers.PreemptiveServer;
+import servers.RoundRobinServer;
 import servers.Server;
 
 public class Main extends Application {
@@ -79,6 +80,7 @@ public class Main extends Application {
         RadioButton selectedRadioButton = (RadioButton) toggleGroup.getSelectedToggle();
         if (selectedRadioButton != null) {
             switch (selectedRadioButton.getText()) {
+
                 case "First Come First Served":
                     server = new NonPreemptiveServer(new FirstComeFirstServed());
                     showPriority = false;

@@ -16,7 +16,7 @@ public class ShortestJobFirstScheduler implements Scheduler {
     public MyProcess pop() {
         MyProcess p = pq.poll();
         // waitingTime : 1000 * p.getBurstTime() ==> (100 * p.getBurstTime()) *10
-        int waitingQuantum = 100 * p.getBurstTime();
+        int waitingQuantum = 100 * p.getRemainingTime();
         while (waitingQuantum-- >= 0) {
             try {
                 Thread.sleep(10);

@@ -25,14 +25,16 @@ public class ProcessTableView implements Observer {
         table = new TableView<>();
         TableColumn<MyProcess, String> pidColumn = new TableColumn<>("Process ID");
         TableColumn<MyProcess, Long> arrivalColumn = new TableColumn<>("Arrival Time");
+        TableColumn<MyProcess, Long> remainingColumn = new TableColumn<>("Remaining Time");
         TableColumn<MyProcess, Integer> burstColumn = new TableColumn<>("Burst Time");
         TableColumn<MyProcess, Integer> priorityColumn = new TableColumn<>("Priority");
         TableColumn<MyProcess, ProcessState> stateColumn = new TableColumn<>("State");
 
-        table.getColumns().addAll(pidColumn, arrivalColumn, burstColumn, priorityColumn, stateColumn);
+        table.getColumns().addAll(pidColumn, arrivalColumn, burstColumn, remainingColumn,priorityColumn, stateColumn);
 
         pidColumn.setCellValueFactory(new PropertyValueFactory<>("pid"));
         arrivalColumn.setCellValueFactory(new PropertyValueFactory<>("arriveTime"));
+        remainingColumn.setCellValueFactory(new PropertyValueFactory<>("remainingTime"));
         burstColumn.setCellValueFactory(new PropertyValueFactory<>("burstTime"));
         if(this.showPriority) {
             priorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
