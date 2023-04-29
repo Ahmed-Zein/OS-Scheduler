@@ -20,6 +20,7 @@ import servers.Server;
 public class Main extends Application {
 
     private Server server;
+    private boolean showPriority;
 
     public static void main(String[] args) {
         launch(args);
@@ -60,7 +61,7 @@ public class Main extends Application {
         // Create button to display selected option
         createBtn.setOnAction(event -> {
             if (setFactory(toggleGroup)) {
-                new SayMyName(server);
+                new SayMyName(server, showPriority);
                 stage.hide();
             } else {
                 warningLabel.setText("choose ur agent (* ￣︿￣)");
@@ -80,21 +81,27 @@ public class Main extends Application {
             switch (selectedRadioButton.getText()) {
                 case "First Come First Served":
                     server = new NonPreemptiveServer(new FirstComeFirstServed());
+                    showPriority = false;
                     break;
                 case "Priority Preemptive":
                     server = new PreemptiveServer(new PriorityScheduler());
+                    showPriority = true;
                     break;
                 case "Priority Nob-Preemptive":
                     server = new NonPreemptiveServer(new PriorityScheduler());
+                    showPriority = true;
                     break;
                 case "Shortest Job First Nob-Preemptive":
                     server = new NonPreemptiveServer(new ShortestJobFirstScheduler());
+                    showPriority = false;
                     break;
                 case "Shortest Job First Preemptive":
                     server = new PreemptiveServer(new ShortestJobFirstScheduler());
+                    showPriority = false;
                     break;
                 case "Round robin":
                     server = new NonPreemptiveServer(new RoundRobin());
+                    showPriority = false;
                     break;
             }
             return true;

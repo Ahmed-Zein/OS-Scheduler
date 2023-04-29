@@ -3,6 +3,7 @@ package servers;
 import Schedulers.RoundRobin;
 import Schedulers.Scheduler;
 import UI.GrantChart;
+import UI.SayMyName;
 import javafx.application.Platform;
 import process.MyProcess;
 import process.ProcessState;
@@ -36,8 +37,9 @@ public class NonPreemptiveServer extends Server {
         try {
             Thread.sleep(quantum);
             Platform.runLater(() -> {
-                GrantChart.instance().addRectangleManually();
+            	GrantChart.instance().addRectangleManually();
             });
+            Thread.sleep(20);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,6 +48,22 @@ public class NonPreemptiveServer extends Server {
         if (p.getBurstTime() != 0) {
             p.setState(ProcessState.ready);
             super.push(p);
+        }
+        else {
+            p.setCompletationTime(System.currentTimeMillis());
+            long offset;
+            
+            if(p.getArriveTime() < SayMyName.getStartTime()) {
+            	offset = SayMyName.getStartTime() - p.getArriveTime() ;
+            }else {
+            	offset = 0;
+            }
+            
+            long turnAroundTime = p.getCompletationTime() - p.getArriveTime() - offset;
+            long waitingTime=  p.getCompletationTime() - p.getArriveTime() - p.getOrignalBurstTime() * 1000 - offset;
+            
+            System.out.println("Turnaround time: " + turnAroundTime);
+            System.out.println("Waiting time: " + waitingTime);
         }
     }
 

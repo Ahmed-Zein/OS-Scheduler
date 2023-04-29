@@ -12,9 +12,12 @@ import java.util.Queue;
 public class ProcessTableView implements Observer {
     private TableView<MyProcess> table;
     private Queue<MyProcess> queue;
-
-    ProcessTableView(Queue<MyProcess> queue) {
+    private boolean showPriority;
+    
+    ProcessTableView(Queue<MyProcess> queue, boolean showPriority) {
         this.queue = queue;
+        this.showPriority = showPriority;
+        
         init();
     }
 
@@ -31,7 +34,9 @@ public class ProcessTableView implements Observer {
         pidColumn.setCellValueFactory(new PropertyValueFactory<>("pid"));
         arrivalColumn.setCellValueFactory(new PropertyValueFactory<>("arriveTime"));
         burstColumn.setCellValueFactory(new PropertyValueFactory<>("burstTime"));
-        priorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
+        if(this.showPriority) {
+            priorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
+        }
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         updateData();
     }

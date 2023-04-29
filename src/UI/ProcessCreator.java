@@ -12,10 +12,12 @@ public class ProcessCreator {
     HBox root;
 
     private Server server;
-
-    ProcessCreator(Server server) {
+    private boolean showPriority;
+    
+    ProcessCreator(Server server, boolean showPriority) {
         root = new HBox();
         this.server = server;
+        this.showPriority = showPriority;
         init();
     }
 
@@ -25,13 +27,27 @@ public class ProcessCreator {
 
         LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
         LabeledTxtField priority = new LabeledTxtField("Set priority");
-        root.getChildren().addAll(burstTime.build(), priority.build(), hbox);
+        
+        System.out.println(this.server);
+
+        root.getChildren().add(burstTime.build());
+        
+        if(this.showPriority) {
+        	root.getChildren().add(priority.build());
+        }
+        
+        root.getChildren().add(hbox);
 
         addProcessBtn.setOnAction(e -> {
             MyProcess p = new MyProcess();
-            if (burstTime.data() > 0 && (priority.data() > 0 || server.getScheduler() instanceof FirstComeFirstServed)) {
+            if (burstTime.data() > 0 && (priority.data() > 0 || !showPriority)) {
                 p.setBurstTime(burstTime.data());
-                p.setPriority(priority.data());
+                if(showPriority) {
+                    p.setPriority(priority.data());
+                }
+                else {
+                	p.setPriority(1);
+                }
                 server.push(p);
                 burstTime.clear();
                 priority.clear();
