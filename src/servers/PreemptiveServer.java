@@ -32,6 +32,8 @@ public class PreemptiveServer extends Server {
                         Thread.sleep(10);
                         if (counter == 100) {
                             counter = 0;
+                            getCurrentlyExecuting().setBurstTime(getCurrentlyExecuting().getBurstTime()-1);
+                            getObservers().update();
                             Platform.runLater(() -> {
                                 GrantChart.instance().addRectangleManually();
                             });
@@ -42,7 +44,6 @@ public class PreemptiveServer extends Server {
                 else {
                     System.out.println("A higher process has come " + "last process remaining time " + waitingQuantum / 100);
                     super.getCurrentlyExecuting().setState(ProcessState.ready);
-                    super.getCurrentlyExecuting().setBurstTime((int) floor(waitingQuantum / 100));
                     super.updateCurrentlyExecuting();
                     waitingQuantum = 100 * super.getCurrentlyExecuting().getBurstTime();
                     counter = 0;
