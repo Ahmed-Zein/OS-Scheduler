@@ -5,24 +5,29 @@ import javafx.scene.paint.Color;
 import java.util.UUID;
 
 public class MyProcess {
+    //Turnaround time = Exit time - Arrival time
+    //Waiting time = Turnaround time - Burst time
     private final UUID pid;
-    private final long arriveTime;
-    private long startTime;
+    private final long creationTime;
+    private long waitingTime = 0;
+    private long turnAround = 0;
+    private long arriveTime;
     private long finishTime;
     private int remainingTime; //
     private int burstTime; //
     private int priority;   // 1 : 5
+    private int numberOfInterrupts;
     private ProcessState state;
     private final Color color;
 
 
     public MyProcess() {
         this.pid = UUID.randomUUID();
-        this.arriveTime = System.currentTimeMillis();
-        this.remainingTime = 1;
+        this.creationTime = System.currentTimeMillis();
         this.priority = 5;
-        this.startTime = -1;
-        this.finishTime = -1;
+        this.finishTime = 0;
+        this.arriveTime = -1;
+        this.numberOfInterrupts = 0; 
         this.state = ProcessState.ready;
         this.color = Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
     }
@@ -31,17 +36,16 @@ public class MyProcess {
         return pid;
     }
 
+    public long getCreationTime() {
+        return creationTime;
+    }
+
     public long getArriveTime() {
         return arriveTime;
     }
 
-    public long getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(long startTime) {
-        if (this.startTime == -1)
-            this.startTime = startTime;
+    public void setArriveTime(long arriveTime) {
+        this.arriveTime = arriveTime;
     }
 
     public long getFinishTime() {
@@ -49,8 +53,31 @@ public class MyProcess {
     }
 
     public void setFinishTime(long finishTime) {
-        if (this.finishTime == -1)
-            this.finishTime = finishTime;
+        this.finishTime = finishTime;
+    }
+
+    public long getWaitingTime() {
+        return waitingTime;
+    }
+
+    public void setWaitingTime(long waitingTime) {
+        this.waitingTime += waitingTime;
+    }
+
+    public long getTurnAround() {
+        return turnAround;
+    }
+
+    public int getNumberOfInterrupts() {
+		return numberOfInterrupts;
+	}
+
+	public void setNumberOfInterrupts(int numberOfInterrupts) {
+		this.numberOfInterrupts = numberOfInterrupts;
+	}
+
+	public void setTurnAround(long turnAround) {
+        this.turnAround += turnAround;
     }
 
     public int getBurstTime() {

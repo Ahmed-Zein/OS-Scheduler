@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import servers.Server;
+import Schedulers.PriorityScheduler;
 
 public class SayMyName {
     private Stage stage;
@@ -39,7 +40,9 @@ public class SayMyName {
     private void init() {
 
         ProcessCreator processCreator = new ProcessCreator(server);
-        ProcessTableView processTable = new ProcessTableView(server.getScheduler().getProcesses());
+        boolean showPriority = this.server.getScheduler() instanceof PriorityScheduler;
+        ProcessTableView processTable = new ProcessTableView(server.getScheduler().getProcesses(), showPriority);        
+
         Button startBtn = new Button("Start");
         HBox btnBox = new HBox(startBtn);
         GrantChart chart = GrantChart.instance();

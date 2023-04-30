@@ -1,6 +1,6 @@
 package UI;
 
-import Schedulers.FirstComeFirstServed;
+import Schedulers.PriorityScheduler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -25,13 +25,25 @@ public class ProcessCreator {
 
         LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
         LabeledTxtField priority = new LabeledTxtField("Set priority");
-        root.getChildren().addAll(burstTime.build(), priority.build(), hbox);
+
+        root.getChildren().add(burstTime.build());
+        
+        if(server.getScheduler() instanceof PriorityScheduler) {
+        	root.getChildren().add(priority.build());
+        }
+        
+        root.getChildren().add(hbox);
 
         addProcessBtn.setOnAction(e -> {
             MyProcess p = new MyProcess();
-            if (burstTime.data() > 0 && (priority.data() > 0 || server.getScheduler() instanceof FirstComeFirstServed)) {
+            if (burstTime.data() > 0 && (priority.data() > 0 || !(server.getScheduler() instanceof PriorityScheduler))) {
                 p.setBurstTime(burstTime.data());
                 p.setPriority(priority.data());
+                if(server.getServerStartTime() == -1) {
+                	p.setArriveTime(0);
+                }else {
+                	p.setArriveTime((p.getCreationTime()- server.getServerStartTime())/1000);
+                }
                 server.push(p);
                 burstTime.clear();
                 priority.clear();

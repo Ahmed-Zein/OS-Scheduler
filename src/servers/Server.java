@@ -20,6 +20,7 @@ public abstract class Server implements Runnable {
     public Server(Scheduler scheduler) {
         this();
         this.scheduler = scheduler;
+        this.serverStartTime = -1;
         System.out.println(scheduler.toString());
     }
 
@@ -52,12 +53,12 @@ public abstract class Server implements Runnable {
     }
 
     public void updateCurrentlyExecuting() {
+    	
         if (scheduler.isEmpty()) {
             return;
         }
         this.currentlyExecuting = scheduler.peek();
         currentlyExecuting.setState(ProcessState.running);
-        currentlyExecuting.setStartTime(Math.max(serverStartTime, currentlyExecuting.getArriveTime()));
         GrantChart.instance().changeColor(currentlyExecuting.getColor());
     }
 
@@ -66,8 +67,7 @@ public abstract class Server implements Runnable {
     }
 
     public void pop() {
-        MyProcess p = scheduler.pop();
-        p.setFinishTime(System.currentTimeMillis());
+        scheduler.pop();
         observers.update();
     }
 
@@ -76,10 +76,6 @@ public abstract class Server implements Runnable {
         if (!finishedList.contains(p))
             finishedList.add(p);
         observers.update();
-    }
-
-    public void pushFinished(MyProcess p) {
-        finishedList.add(p);
     }
 
     public long getServerStartTime() {
@@ -92,35 +88,27 @@ public abstract class Server implements Runnable {
 
     public abstract void serve();
 
-    public float calcAvgWaitingTime() {
-//        todo try the log list (arriveTime, finishTime, burstTime)
-//        long avgWaitingTime = 0;
-//        for (MyProcess p : finishedList) {
-//            long fTime = (p.getFinishTime() - serverStartTime) / 1000;
-//            long sTime;
-//            if (p.getStartTime() < serverStartTime) sTime = 0;
-//            else sTime = (p.getStartTime() - serverStartTime) / 1000;
-//            long bTime = p.getBurstTime();
-//            System.out.println(sTime + "\t" + fTime + "\t" + bTime);
-//            avgWaitingTime += fTime - (sTime + bTime);
-//        }
-//        if (finishedList.size() > 0)
-//            return avgWaitingTime / finishedList.size();
-        return 0;
+    public double calcAvgWaitingTime() {
+        //        todo try the log list (arriveTime, finishTime, burstTime)
+        double avgWaitingTime = 0;
+        for (MyProcess p : finishedList) {
+            System.out.println(p.getArriveTime() + "\t" + p.getFinishTime() + "\t" + p.getBurstTime() + "\t" + p.getWaitingTime() + "\t" + p.getTurnAround());
+            avgWaitingTime += p.getWaitingTime();
 
+        }
+        if (finishedList.size() > 0)
+            return avgWaitingTime / finishedList.size();
+        return 0;
     }
 
-    public float calcTurnAroundTime() {
+    public double calcTurnAroundTime() {
         //        todo try the log list (arriveTime, finishTime, burstTime)
-//        long avgTurnAroundTime = 0;
-//        for (MyProcess p : finishedList) {
-//            long fTime = (p.getFinishTime() - serverStartTime) / 1000;
-//            long sTime = (p.getStartTime() - serverStartTime) / 1000;
-//            long bTime = p.getBurstTime();
-//            avgTurnAroundTime += fTime - sTime;
-//        }
-//        if (finishedList.size() > 0)
-//            return avgTurnAroundTime / finishedList.size();
+        double avgTurnAroundTime = 0;
+        for (MyProcess p : finishedList) {
+            avgTurnAroundTime += p.getTurnAround();
+        }
+        if (finishedList.size() > 0)
+            return avgTurnAroundTime / finishedList.size();
         return 0;
     }
 
