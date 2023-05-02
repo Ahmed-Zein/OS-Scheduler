@@ -6,28 +6,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import servers.Server;
+import Schedulers.PriorityScheduler;
 
 public class SayMyName {
     private Stage stage;
     private Server server;
-    private boolean showPriority;
     private Thread thread;
     private VBox root;
-    
-    static private long startTime;
-    
+
     private SayMyName() {
     }
 
-    public static long getStartTime() {
-		return startTime;
-	}
-
-
-	public SayMyName(Server server, boolean showPriority) {
+    public SayMyName(Server server) {
         this.server = server;
         thread = new Thread(server);
-        this.showPriority = showPriority;
         stage = new Stage();
         root = new VBox();
         init();
@@ -47,8 +39,10 @@ public class SayMyName {
      */
     private void init() {
 
-        ProcessCreator processCreator = new ProcessCreator(server, showPriority);
-        ProcessTableView processTable = new ProcessTableView(server.getScheduler().getProcesses(), showPriority);
+        ProcessCreator processCreator = new ProcessCreator(server);
+        boolean showPriority = this.server.getScheduler() instanceof PriorityScheduler;
+        ProcessTableView processTable = new ProcessTableView(server.getScheduler().getProcesses(), showPriority);        
+
         Button startBtn = new Button("Start");
         HBox btnBox = new HBox(startBtn);
         GrantChart chart = GrantChart.instance();
@@ -56,10 +50,6 @@ public class SayMyName {
         server.getObservers().addObserver(processTable);
 
         startBtn.setOnAction(e -> {
-
-            processTable.updateData();
-            SayMyName.startTime = System.currentTimeMillis();
-            if (!thread.isAlive())
             if (!server.isRunning())
                 thread.start();
             thread = new Thread(server);

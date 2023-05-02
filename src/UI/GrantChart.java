@@ -69,7 +69,7 @@ public class GrantChart {
         count++;
     }
 
-    public void addRectangleManually() {
+    public synchronized void addRectangleManually() {
         addRectangle();
     }
 

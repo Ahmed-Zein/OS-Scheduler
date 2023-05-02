@@ -2,8 +2,8 @@ package servers;
 
 import Schedulers.Scheduler;
 import UI.GrantChart;
-import UI.SayMyName;
 import javafx.application.Platform;
+import process.MyProcess;
 
 public class NonPreemptiveServer extends Server {
 
@@ -23,57 +23,18 @@ public class NonPreemptiveServer extends Server {
         return;
     }
 
-    private void roundRobinExecute() {
-        MyProcess p = super.getCurrentlyExecuting();
-        p.setState(ProcessState.running);
-        int quantum = 1000; //quantum = 1 sec
-        try {
-            Thread.sleep(quantum);
-            Platform.runLater(() -> {
-            	GrantChart.instance().addRectangleManually();
-            });
-            Thread.sleep(20);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        p.setBurstTime(p.getBurstTime() - 1);
-        super.pop();
-        if (p.getBurstTime() != 0) {
-            p.setState(ProcessState.ready);
-            super.push(p);
-        }
-        else {
-            p.setCompletationTime(System.currentTimeMillis());
-            long offset;
-            
-            if(p.getArriveTime() < SayMyName.getStartTime()) {
-            	offset = SayMyName.getStartTime() - p.getArriveTime() ;
-            }else {
-            	offset = 0;
-            }
-            
-            long turnAroundTime = p.getCompletationTime() - p.getArriveTime() - offset;
-            long waitingTime=  p.getCompletationTime() - p.getArriveTime() - p.getOrignalBurstTime() * 1000 - offset;
-            
-            System.out.println("Turnaround time: " + turnAroundTime);
-            System.out.println("Waiting time: " + waitingTime);
-        }
-    }
-
-//    @Override
-//    public float calcTurnAroundTime() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public float calcAvgWaitingTime() {
-//        return 0;
-//    }
-
-
     private void execute() {
         super.updateCurrentlyExecuting();
+        MyProcess p = super.getCurrentlyExecuting();
         System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
+//        if (p.getCreationTime() < super.getServerStartTime()) {
+//            p.setArriveTime(0);
+//        } else {
+//            p.setArriveTime((p.getCreationTime() - super.getServerStartTime()) / 1000);
+//        }
+        p.setWaitingTime((System.currentTimeMillis() - super.getServerStartTime())/1000 - p.getArriveTime());
+        p.setTurnAround((System.currentTimeMillis() - super.getServerStartTime())/1000 - p.getArriveTime() + p.getBurstTime());
+
         try {
             int burstTime = super.getCurrentlyExecuting().getRemainingTime();
             while (burstTime-- > 0) {
@@ -81,7 +42,34 @@ public class NonPreemptiveServer extends Server {
                 Platform.runLater(() -> {
                     GrantChart.instance().addRectangleManually();
                 });
+                super.getCurrentlyExecuting().setRemainingTime(burstTime);
+                getObservers().update();
             }
+            
+//            p.setFinishTime(System.currentTimeMillis());
+////            long offset;
+////            
+////            if(p.getCreationTime() < super.getServerStartTime()) {
+////            	offset = super.getServerStartTime() - p.getCreationTime() ;
+////            }
+////            else {
+////            	offset = 0;
+////            }
+////            
+//////            long turnAroundTime = p.getFinishTime() - p.getArriveTime() - offset;
+//////            long waitingTime=  p.getFinishTime() - p.getArriveTime() - p.getBurstTime() * 1000 - offset;
+////////            p.setFinishTime(p.getFinishTime() - offset);
+//////
+//////            System.out.println("Turnaround time: " + turnAroundTime);
+//////            System.out.println("Waiting time: " + waitingTime);
+//////            
+//////            System.out.println("Creation time: " + p.getCreationTime());
+//////            System.out.println("Start time: " + super.getServerStartTime());
+//////            System.out.println("Arrival time: " + p.getArriveTime());
+//////            System.out.println("Finish time: " + p.getFinishTime());
+
+
+
             super.pop();
             System.out.println("FINISHED");
         } catch (InterruptedException e) {
@@ -93,12 +81,15 @@ public class NonPreemptiveServer extends Server {
     public void run() {
         System.out.println("server starting");
         setServerStartTime(System.currentTimeMillis());
+        System.out.println("server start Time" + super.getServerStartTime());
+
         super.setRunning(true);
         this.serve();
         System.out.println(calcAvgWaitingTime());
         System.out.println(calcTurnAroundTime());
         super.finishedList.clear();
         System.out.println("server shutdown");
+        super.setServerStartTime(-1);
         super.setRunning(false);
     }
 }

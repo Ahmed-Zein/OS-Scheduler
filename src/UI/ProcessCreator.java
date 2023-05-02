@@ -1,6 +1,6 @@
 package UI;
 
-import Schedulers.FirstComeFirstServed;
+import Schedulers.PriorityScheduler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -12,12 +12,10 @@ public class ProcessCreator {
     HBox root;
 
     private Server server;
-    private boolean showPriority;
-    
-    ProcessCreator(Server server, boolean showPriority) {
+
+    ProcessCreator(Server server) {
         root = new HBox();
         this.server = server;
-        this.showPriority = showPriority;
         init();
     }
 
@@ -27,12 +25,10 @@ public class ProcessCreator {
 
         LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
         LabeledTxtField priority = new LabeledTxtField("Set priority");
-        
-        System.out.println(this.server);
 
         root.getChildren().add(burstTime.build());
         
-        if(this.showPriority) {
+        if(server.getScheduler() instanceof PriorityScheduler) {
         	root.getChildren().add(priority.build());
         }
         
@@ -40,13 +36,13 @@ public class ProcessCreator {
 
         addProcessBtn.setOnAction(e -> {
             MyProcess p = new MyProcess();
-            if (burstTime.data() > 0 && (priority.data() > 0 || !showPriority)) {
+            if (burstTime.data() > 0 && (priority.data() > 0 || !(server.getScheduler() instanceof PriorityScheduler))) {
                 p.setBurstTime(burstTime.data());
-                if(showPriority) {
-                    p.setPriority(priority.data());
-                }
-                else {
-                	p.setPriority(1);
+                p.setPriority(priority.data());
+                if(server.getServerStartTime() == -1) {
+                	p.setArriveTime(0);
+                }else {
+                	p.setArriveTime((p.getCreationTime()- server.getServerStartTime())/1000);
                 }
                 server.push(p);
                 burstTime.clear();
