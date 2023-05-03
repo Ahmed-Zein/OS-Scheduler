@@ -47,6 +47,7 @@ public class ProcessTableView implements Observer {
 
         table.getColumns().addAll(stateColumn);
 
+        table.setMaxHeight(200);
         pidColumn.setCellValueFactory(new PropertyValueFactory<>("pid"));
         arrivalColumn.setCellValueFactory(new PropertyValueFactory<>("arriveTime"));
         remainingColumn.setCellValueFactory(new PropertyValueFactory<>("remainingTime"));
