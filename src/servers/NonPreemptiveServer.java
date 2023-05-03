@@ -24,7 +24,6 @@ public class NonPreemptiveServer extends Server {
     }
 
     private void execute() {
-        int speed =GrantChart.instance().getSpeed();
         super.updateCurrentlyExecuting();
         MyProcess p = super.getCurrentlyExecuting();
         System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
@@ -33,6 +32,7 @@ public class NonPreemptiveServer extends Server {
         try {
             int burstTime = super.getCurrentlyExecuting().getRemainingTime();
             while (burstTime-- > 0) {
+                int speed =GrantChart.instance().getSpeed();
                 Thread.sleep(speed);
                 Platform.runLater(() -> {
                     GrantChart.instance().addRectangleManually();

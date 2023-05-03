@@ -26,16 +26,15 @@ public class PreemptiveServer extends Server {
                 p.setWaitingTime((System.currentTimeMillis() - super.getServerStartTime()) / 1000 - p.getArriveTime());
             else
                 p.setWaitingTime((System.currentTimeMillis() - p.getFinishTime()) / 1000);
-
-            int waitingQuantum = 100 * super.getCurrentlyExecuting().getRemainingTime();
             int counter = 0;
             int temp = 0;
-            while (waitingQuantum-- > 0) {
+            while (p.getRemainingTime() > 0) {
+                int speed = GrantChart.instance().getSpeed();
                 if (super.getCurrentlyExecuting().getPid().equals(super.getScheduler().peek().getPid()))
                     try {
                         counter++;
                         Thread.sleep(10);
-                        if (counter == 100) {
+                        if (counter >= speed / 10) {
                             counter = 0;
                             temp++;
                             getCurrentlyExecuting().setRemainingTime(getCurrentlyExecuting().getRemainingTime() - 1);
@@ -48,7 +47,7 @@ public class PreemptiveServer extends Server {
                         e.printStackTrace();
                     }
                 else {
-                    System.out.println("A higher process has come " + "last process remaining time " + waitingQuantum / 100);
+                    System.out.println("A higher process has come " + "last process remaining time " + p.getRemainingTime());
                     p.setFinishTime(System.currentTimeMillis());
                     p.setState(ProcessState.ready);
 
@@ -61,9 +60,7 @@ public class PreemptiveServer extends Server {
                     else
                         p.setWaitingTime((System.currentTimeMillis() - p.getFinishTime()) / 1000);
                     p.setTurnAround(p.getWaitingTime() + temp);
-                    waitingQuantum = 100 * super.getCurrentlyExecuting().getRemainingTime();
                     counter = 0;
-
                 }
             }
             System.out.println("FINISHED");

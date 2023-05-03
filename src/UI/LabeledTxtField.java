@@ -14,7 +14,7 @@ class LabeledTxtField {
     LabeledTxtField(String label) {
         lbl = new Label(label);
         textField = new TextField();
-
+        textField.setMaxSize(150, 20);
         // Create a TextFormatter that only allows integers
         StringConverter<Integer> converter = new IntegerStringConverter();
         TextFormatter<Integer> formatter = new TextFormatter<>(converter, 0, c ->
