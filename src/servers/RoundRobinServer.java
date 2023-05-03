@@ -28,12 +28,12 @@ public class RoundRobinServer extends Server {
         System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
         MyProcess p = super.getCurrentlyExecuting();
         System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
-        
+
         if (p.getFinishTime() == 0)
             p.setWaitingTime((System.currentTimeMillis() - super.getServerStartTime()) / 1000 - p.getArriveTime());
         else
             p.setWaitingTime((System.currentTimeMillis() - p.getFinishTime()) / 1000);
-        
+
         p.setState(ProcessState.running);
         int quantum = 1000; //quantum = 1 sec
         try {
@@ -72,13 +72,8 @@ public class RoundRobinServer extends Server {
 
     @Override
     public void run() {
-        System.out.println("server starting");
-        setServerStartTime(System.currentTimeMillis());
-        super.setRunning(true);
+        super.start();
         this.serve();
-        System.out.println(calcAvgWaitingTime());
-        System.out.println(calcTurnAroundTime());
-        System.out.println("server shutdown");
-        super.setRunning(false);
+        super.shutdown();
     }
 }

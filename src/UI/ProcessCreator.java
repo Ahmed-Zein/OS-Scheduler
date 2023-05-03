@@ -11,7 +11,7 @@ import servers.Server;
 public class ProcessCreator {
     HBox root;
 
-    private Server server;
+    private final Server server;
 
     ProcessCreator(Server server) {
         root = new HBox();

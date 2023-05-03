@@ -16,6 +16,7 @@ public class GrantChart {
     private int count = 0;
     private ScrollPane scrollPane;
     private Color color;
+    private int speed;
     private static GrantChart chart;
 
     private GrantChart(Color color) {
@@ -35,6 +36,7 @@ public class GrantChart {
     }
 
     private GrantChart() {
+        speed = 1000;
         this.color = Color.ROSYBROWN;
         init();
     }
@@ -61,7 +63,7 @@ public class GrantChart {
 
         // Animate the rectangle's position with a keyframe
         KeyValue keyValue = new KeyValue(rectangle.xProperty(), count * 20);
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), keyValue);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(this.speed), keyValue);
         Timeline timeline = new Timeline(keyFrame);
         timeline.play();
 
@@ -83,6 +85,14 @@ public class GrantChart {
 
     public void changeColor(Color color) {
         this.color = color;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
     ScrollPane build() {

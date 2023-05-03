@@ -2,6 +2,8 @@ package servers;
 
 import Schedulers.Scheduler;
 import UI.GrantChart;
+import UI.ShowReport;
+import javafx.application.Platform;
 import oserver.Observable;
 import process.MyProcess;
 import process.ProcessState;
@@ -14,7 +16,7 @@ public abstract class Server implements Runnable {
     private Scheduler scheduler;
     private final Observable observers = new Observable();
     private MyProcess currentlyExecuting;
-    ArrayList<MyProcess> finishedList;
+    private final ArrayList<MyProcess> finishedList;
 
 
     public Server(Scheduler scheduler) {
@@ -53,7 +55,6 @@ public abstract class Server implements Runnable {
     }
 
     public void updateCurrentlyExecuting() {
-    	
         if (scheduler.isEmpty()) {
             return;
         }
@@ -86,13 +87,10 @@ public abstract class Server implements Runnable {
         this.serverStartTime = serverStartTime;
     }
 
-    public abstract void serve();
-
     public double calcAvgWaitingTime() {
-        //        todo try the log list (arriveTime, finishTime, burstTime)
         double avgWaitingTime = 0;
         for (MyProcess p : finishedList) {
-            System.out.println(p.getArriveTime() + "\t" + p.getFinishTime() + "\t" + p.getBurstTime() + "\t" + p.getWaitingTime() + "\t" + p.getTurnAround());
+//            System.out.println(p.getArriveTime() + "\t" + p.getFinishTime() + "\t" + p.getBurstTime() + "\t" + p.getWaitingTime() + "\t" + p.getTurnAround());
             avgWaitingTime += p.getWaitingTime();
 
         }
@@ -102,7 +100,6 @@ public abstract class Server implements Runnable {
     }
 
     public double calcTurnAroundTime() {
-        //        todo try the log list (arriveTime, finishTime, burstTime)
         double avgTurnAroundTime = 0;
         for (MyProcess p : finishedList) {
             avgTurnAroundTime += p.getTurnAround();
@@ -111,6 +108,28 @@ public abstract class Server implements Runnable {
             return avgTurnAroundTime / finishedList.size();
         return 0;
     }
+
+    public void start() {
+        System.out.println("server starting");
+        setServerStartTime(System.currentTimeMillis());
+        System.out.println("server start Time: " + this.getServerStartTime());
+        this.setRunning(true);
+    }
+
+    public void shutdown() {
+        double wt = calcAvgWaitingTime();
+        double tat =calcTurnAroundTime();
+        Platform.runLater(() -> {
+            ShowReport.getInstance().setWaitingTime(wt);
+            ShowReport.getInstance().setTurnAround(tat);
+        });
+        this.finishedList.clear();
+        System.out.println("server shutdown");
+        this.setServerStartTime(-1);
+        this.setRunning(false);
+    }
+
+    public abstract void serve();
 
     @Override
     public void run() {

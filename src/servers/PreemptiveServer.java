@@ -15,7 +15,7 @@ public class PreemptiveServer extends Server {
     private PreemptiveServer() {
         super();
     }
-    
+
     @Override
     public void serve() {
         while (!super.getScheduler().isEmpty()) {
@@ -44,13 +44,15 @@ public class PreemptiveServer extends Server {
                                 GrantChart.instance().addRectangleManually();
                             });
                         }
-                    } catch (Exception e) {
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 else {
                     System.out.println("A higher process has come " + "last process remaining time " + waitingQuantum / 100);
                     p.setFinishTime(System.currentTimeMillis());
                     p.setState(ProcessState.ready);
+
+                    // reset inner while-loop
                     super.updateCurrentlyExecuting();
                     System.out.println("Executing: " + super.getCurrentlyExecuting().getPid());
                     p = super.getCurrentlyExecuting();
@@ -70,31 +72,13 @@ public class PreemptiveServer extends Server {
             if (super.getScheduler().isEmpty())
                 return;
         }
-        return;
     }
-//
-//    @Override
-//    public float calcTurnAroundTime() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public float calcAvgWaitingTime() {
-//        return 0;
-//    }
 
     @Override
     public void run() {
-        System.out.println("server starting");
-        setServerStartTime(System.currentTimeMillis());
-        super.setRunning(true);
+        super.start();
         this.serve();
-        System.out.println(calcAvgWaitingTime());
-        System.out.println(calcTurnAroundTime());
-        System.out.println("server shutdown");
-        super.finishedList.clear();
-        super.setServerStartTime(-1);
-        super.setRunning(false);
+        super.shutdown();
     }
 
 }
