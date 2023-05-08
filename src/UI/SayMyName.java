@@ -48,7 +48,9 @@ public class SayMyName {
         ProcessTableView processTable = new ProcessTableView(server.getScheduler().getProcesses(), showPriority);
 
         Button startBtn = new Button("Start");
-        HBox btnBox = new HBox(startBtn);
+        HBox dummy = new HBox();
+        dummy.getChildren().addAll(startBtn,GrantChart.instance().clearBtn());
+        HBox btnBox = new HBox(dummy);
         VBox container = new VBox();
         HBox comboBox =   this.buildComboBox();
         GrantChart chart = GrantChart.instance();
@@ -69,6 +71,7 @@ public class SayMyName {
         root.setStyle("-fx-background-color: #f4f4f4; -fx-padding: 10px; -fx-spacing: 10px;");
         container.setStyle("-fx-background-color: #f4f4f4; -fx-padding: 10px; -fx-spacing: 5px;");
         btnBox.setStyle("-fx-background-color: #f4f4f4; -fx-spacing: 30px;");
+        dummy.setStyle("-fx-background-color: #f4f4f4; -fx-spacing: 30px;");
 
         buildScene();
     }

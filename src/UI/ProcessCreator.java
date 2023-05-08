@@ -26,7 +26,6 @@ public class ProcessCreator {
 
         LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
         LabeledTxtField priority = new LabeledTxtField("Set priority");
-//        LabeledTxtField arriveTime = new LabeledTxtField("Set Arrive Time");
 
         hContainer.getChildren().add(burstTime.build());
 
@@ -45,8 +44,7 @@ public class ProcessCreator {
                 if (!server.isRunning()) {
                     p.setArriveTime(0);
                 } else {
-                    p.setArriveTime((p.getCreationTime() - server.getServerStartTime()) / 1000);
-
+                    p.setArriveTime((System.currentTimeMillis() - server.getServerStartTime()) / 1000);
                 }
                 server.push(p);
                 burstTime.clear();

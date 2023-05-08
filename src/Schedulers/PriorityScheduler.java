@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class PriorityScheduler implements Scheduler {
-    private PriorityQueue<MyProcess> pq;
+    private final PriorityQueue<MyProcess> pq;
 
     public PriorityScheduler() {
         pq = new PriorityQueue<>(new ProcessPriorityComparator());

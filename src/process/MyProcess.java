@@ -5,39 +5,38 @@ import javafx.scene.paint.Color;
 import java.util.UUID;
 
 public class MyProcess {
-    //Turnaround time = Exit time - Arrival time
-    //Waiting time = Turnaround time - Burst time
     private final UUID pid;
-    private final long creationTime;
+    private final String name;
+    private static int count = 0;
     private long waitingTime = 0;
     private long turnAround = 0;
     private long arriveTime;
     private long finishTime;
-    private int remainingTime; //
-    private int burstTime; //
-    private int priority;   // 1 : 5
-    private int numberOfInterrupts;
+    private int remainingTime;
+    private int burstTime;
+    private int priority;
     private ProcessState state;
     private final Color color;
 
 
     public MyProcess() {
         this.pid = UUID.randomUUID();
-        this.creationTime = System.currentTimeMillis();
         this.priority = 5;
         this.finishTime = 0;
         this.arriveTime = -1;
-        this.numberOfInterrupts = 0; 
         this.state = ProcessState.ready;
         this.color = Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
+        name = "p" + count;
+        count++;
+        System.out.println(name);
     }
 
     public UUID getPid() {
         return pid;
     }
 
-    public long getCreationTime() {
-        return creationTime;
+    public String getName() {
+        return name;
     }
 
     public long getArriveTime() {
@@ -68,15 +67,7 @@ public class MyProcess {
         return turnAround;
     }
 
-    public int getNumberOfInterrupts() {
-		return numberOfInterrupts;
-	}
-
-	public void setNumberOfInterrupts(int numberOfInterrupts) {
-		this.numberOfInterrupts = numberOfInterrupts;
-	}
-
-	public void setTurnAround(long turnAround) {
+    public void setTurnAround(long turnAround) {
         this.turnAround = turnAround;
     }
 

@@ -40,7 +40,7 @@ public class PreemptiveServer extends Server {
                             getCurrentlyExecuting().setRemainingTime(getCurrentlyExecuting().getRemainingTime() - 1);
                             getObservers().update();
                             Platform.runLater(() -> {
-                                GrantChart.instance().addRectangleManually();
+                                GrantChart.instance().addRectangleManually(getCurrentlyExecuting().getName());
                             });
                         }
                     } catch (InterruptedException e) {

@@ -35,7 +35,7 @@ public class NonPreemptiveServer extends Server {
                 int speed =GrantChart.instance().getSpeed();
                 Thread.sleep(speed);
                 Platform.runLater(() -> {
-                    GrantChart.instance().addRectangleManually();
+                    GrantChart.instance().addRectangleManually(getCurrentlyExecuting().getName());
                 });
                 super.getCurrentlyExecuting().setRemainingTime(burstTime);
                 getObservers().update();

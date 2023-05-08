@@ -12,37 +12,29 @@ import java.util.Queue;
 public class ProcessTableView implements Observer {
     private TableView<MyProcess> table;
     private final Queue<MyProcess> queue;
-    private boolean showPriority;
-    
+    private final boolean showPriority;
+
     ProcessTableView(Queue<MyProcess> queue, boolean showPriority) {
         this.queue = queue;
         this.showPriority = showPriority;
         init();
     }
 
-    public boolean isShowPriority() {
-		return showPriority;
-	}
-
-	public void setShowPriority(boolean showPriority) {
-		this.showPriority = showPriority;
-	}
-
-	void init() {
+    void init() {
         table = new TableView<>();
         TableColumn<MyProcess, String> pidColumn = new TableColumn<>("Process ID");
         TableColumn<MyProcess, Long> arrivalColumn = new TableColumn<>("Arrival Time");
         TableColumn<MyProcess, Long> remainingColumn = new TableColumn<>("Remaining Time");
         TableColumn<MyProcess, Integer> burstColumn = new TableColumn<>("Burst Time");
-        
+
         table.getColumns().addAll(pidColumn, arrivalColumn, burstColumn, remainingColumn);
-        
-        if(showPriority) {
+
+        if (showPriority) {
             TableColumn<MyProcess, Integer> priorityColumn = new TableColumn<>("Priority");
             priorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
             table.getColumns().addAll(priorityColumn);
         }
-        
+
         TableColumn<MyProcess, ProcessState> stateColumn = new TableColumn<>("State");
 
         table.getColumns().addAll(stateColumn);

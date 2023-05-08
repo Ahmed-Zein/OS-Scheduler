@@ -90,9 +90,7 @@ public abstract class Server implements Runnable {
     public double calcAvgWaitingTime() {
         double avgWaitingTime = 0;
         for (MyProcess p : finishedList) {
-//            System.out.println(p.getArriveTime() + "\t" + p.getFinishTime() + "\t" + p.getBurstTime() + "\t" + p.getWaitingTime() + "\t" + p.getTurnAround());
             avgWaitingTime += p.getWaitingTime();
-
         }
         if (finishedList.size() > 0)
             return avgWaitingTime / finishedList.size();

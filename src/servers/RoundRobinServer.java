@@ -40,7 +40,7 @@ public class RoundRobinServer extends Server {
         try {
             Thread.sleep(quantum);
             Platform.runLater(() -> {
-                GrantChart.instance().addRectangleManually();
+                GrantChart.instance().addRectangleManually(getCurrentlyExecuting().getName());
             });
             Thread.sleep(30);
         } catch (Exception e) {
