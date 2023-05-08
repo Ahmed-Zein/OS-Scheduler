@@ -30,7 +30,7 @@ public class PreemptiveServer extends Server {
             int temp = 0;
             while (p.getRemainingTime() > 0) {
                 int speed = GrantChart.instance().getSpeed();
-                if (super.getCurrentlyExecuting().getPid().equals(super.getScheduler().peek().getPid()))
+                if (super.getCurrentlyExecuting().getPid().equals(super.getScheduler().peek().getPid())) {
                     try {
                         counter++;
                         Thread.sleep(10);
@@ -46,6 +46,7 @@ public class PreemptiveServer extends Server {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                }
                 else {
                     System.out.println("A higher process has come " + "last process remaining time " + p.getRemainingTime());
                     p.setFinishTime(System.currentTimeMillis());
@@ -61,6 +62,7 @@ public class PreemptiveServer extends Server {
                         p.setWaitingTime((System.currentTimeMillis() - p.getFinishTime()) / 1000);
                     p.setTurnAround(p.getWaitingTime() + temp);
                     counter = 0;
+                    temp = 0;
                 }
             }
             System.out.println("FINISHED");

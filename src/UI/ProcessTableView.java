@@ -11,7 +11,7 @@ import java.util.Queue;
 
 public class ProcessTableView implements Observer {
     private TableView<MyProcess> table;
-    private Queue<MyProcess> queue;
+    private final Queue<MyProcess> queue;
     private boolean showPriority;
     
     ProcessTableView(Queue<MyProcess> queue, boolean showPriority) {
@@ -56,7 +56,7 @@ public class ProcessTableView implements Observer {
         updateData();
     }
 
-    TableView build() {
+    public TableView<MyProcess> build() {
         return table;
     }
 

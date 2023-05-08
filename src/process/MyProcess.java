@@ -77,7 +77,7 @@ public class MyProcess {
 	}
 
 	public void setTurnAround(long turnAround) {
-        this.turnAround += turnAround;
+        this.turnAround = turnAround;
     }
 
     public int getBurstTime() {
