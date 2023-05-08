@@ -36,13 +36,13 @@ public class Main extends Application {
         // Create a toggle group for the radio buttons
         ToggleGroup toggleGroup = new ToggleGroup();
 
-        Label selectionLabel = new Label("chose your agent");
+        Label selectionLabel = new Label("choose your agent");
         Label warningLabel = new Label(null);
 
 
         RadioButton option1 = new RadioButton("First Come First Served");
         RadioButton option2 = new RadioButton("Priority Preemptive");
-        RadioButton option3 = new RadioButton("Priority Nob-Preemptive");
+        RadioButton option3 = new RadioButton("Priority Non-Preemptive");
         RadioButton option4 = new RadioButton("Shortest Job First Nob-Preemptive");
         RadioButton option5 = new RadioButton("Shortest Job First Preemptive");
         RadioButton option6 = new RadioButton("Round robin");

@@ -118,7 +118,7 @@ public abstract class Server implements Runnable {
 
     public void shutdown() {
         double wt = calcAvgWaitingTime();
-        double tat =calcTurnAroundTime();
+        double tat = calcTurnAroundTime();
         Platform.runLater(() -> {
             ShowReport.getInstance().setWaitingTime(wt);
             ShowReport.getInstance().setTurnAround(tat);

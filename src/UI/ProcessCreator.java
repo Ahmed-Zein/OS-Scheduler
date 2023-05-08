@@ -26,7 +26,7 @@ public class ProcessCreator {
 
         LabeledTxtField burstTime = new LabeledTxtField("Enter Burst Time");
         LabeledTxtField priority = new LabeledTxtField("Set priority");
-        LabeledTxtField arriveTime = new LabeledTxtField("Set Arrive Time");
+//        LabeledTxtField arriveTime = new LabeledTxtField("Set Arrive Time");
 
         hContainer.getChildren().add(burstTime.build());
 
@@ -34,27 +34,23 @@ public class ProcessCreator {
             hContainer.getChildren().add(priority.build());
         }
         hContainer.getChildren().add(addProcessBtn);
-        root.getChildren().addAll(hContainer, arriveTime.build());
+        root.getChildren().addAll(hContainer);
 
         addProcessBtn.setOnAction(e -> {
             MyProcess p = new MyProcess();
             if (burstTime.data() > 0 && (priority.data() > 0 || !(server.getScheduler() instanceof PriorityScheduler))) {
                 p.setBurstTime(burstTime.data());
                 p.setPriority(priority.data());
-                if (arriveTime.data() > 0 && !server.getScheduler().isEmpty()) {
-                    p.setArriveTime(arriveTime.data());
 
+                if (!server.isRunning()) {
+                    p.setArriveTime(0);
                 } else {
-                    if (server.getServerStartTime() == -1) {
-                        p.setArriveTime(0);
-                    } else {
-                        p.setArriveTime((p.getCreationTime() - server.getServerStartTime()) / 1000);
-                    }
+                    p.setArriveTime((p.getCreationTime() - server.getServerStartTime()) / 1000);
+
                 }
                 server.push(p);
                 burstTime.clear();
                 priority.clear();
-                arriveTime.clear();
             }
         });
         hContainer.setStyle("-fx-background-color: #f4f4f4; -fx-spacing: 10px;");
