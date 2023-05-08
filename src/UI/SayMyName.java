@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import servers.Server;
@@ -100,12 +99,10 @@ public class SayMyName {
             String selectedOption = comboBox.getValue();
 
             // Perform an action based on the selected item
-            if (selectedOption.equals("Ultra Fast")) {
-                GrantChart.instance().setSpeed(10);
-            } else if (selectedOption.equals("Normal")) {
-                GrantChart.instance().setSpeed(1000);
-            } else if (selectedOption.equals("Slow Motion")) {
-                GrantChart.instance().setSpeed(2000);
+            switch (selectedOption) {
+                case "Ultra Fast" -> GrantChart.instance().setSpeed(10);
+                case "Normal" -> GrantChart.instance().setSpeed(1000);
+                case "Slow Motion" -> GrantChart.instance().setSpeed(2000);
             }
         });
         pane.getChildren().addAll(lbl, comboBox);

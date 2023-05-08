@@ -28,7 +28,6 @@ public class MyProcess {
         this.color = Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
         name = "p" + count;
         count++;
-        System.out.println(name);
     }
 
     public UUID getPid() {
