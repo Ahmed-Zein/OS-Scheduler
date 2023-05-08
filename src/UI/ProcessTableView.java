@@ -22,7 +22,7 @@ public class ProcessTableView implements Observer {
 
     void init() {
         table = new TableView<>();
-        TableColumn<MyProcess, String> pidColumn = new TableColumn<>("Process ID");
+        TableColumn<MyProcess, String> pidColumn = new TableColumn<>("Process Name");
         TableColumn<MyProcess, Long> arrivalColumn = new TableColumn<>("Arrival Time");
         TableColumn<MyProcess, Long> remainingColumn = new TableColumn<>("Remaining Time");
         TableColumn<MyProcess, Integer> burstColumn = new TableColumn<>("Burst Time");
@@ -40,7 +40,7 @@ public class ProcessTableView implements Observer {
         table.getColumns().addAll(stateColumn);
 
         table.setMaxHeight(200);
-        pidColumn.setCellValueFactory(new PropertyValueFactory<>("pid"));
+        pidColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         arrivalColumn.setCellValueFactory(new PropertyValueFactory<>("arriveTime"));
         remainingColumn.setCellValueFactory(new PropertyValueFactory<>("remainingTime"));
         burstColumn.setCellValueFactory(new PropertyValueFactory<>("burstTime"));

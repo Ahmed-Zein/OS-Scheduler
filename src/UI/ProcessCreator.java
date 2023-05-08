@@ -36,8 +36,8 @@ public class ProcessCreator {
         root.getChildren().addAll(hContainer);
 
         addProcessBtn.setOnAction(e -> {
-            MyProcess p = new MyProcess();
             if (burstTime.data() > 0 && (priority.data() > 0 || !(server.getScheduler() instanceof PriorityScheduler))) {
+                MyProcess p = new MyProcess();
                 p.setBurstTime(burstTime.data());
                 p.setPriority(priority.data());
 
