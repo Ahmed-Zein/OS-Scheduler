@@ -1,6 +1,9 @@
 package UI;
 
+import Schedulers.FirstComeFirstServed;
 import Schedulers.PriorityScheduler;
+import Schedulers.RoundRobin;
+import Schedulers.ShortestJobFirstScheduler;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import servers.NonPreemptiveServer;
+import servers.PreemptiveServer;
+import servers.RoundRobinServer;
 import servers.Server;
 
 public class SayMyName {
@@ -48,15 +54,15 @@ public class SayMyName {
 
         Button startBtn = new Button("Start");
         HBox dummy = new HBox();
-        dummy.getChildren().addAll(startBtn,GrantChart.instance().clearBtn());
+        dummy.getChildren().addAll(startBtn, GrantChart.instance().clearBtn());
         HBox btnBox = new HBox(dummy);
         VBox container = new VBox();
-        HBox comboBox =   this.buildComboBox();
+        HBox comboBox = this.buildComboBox();
         GrantChart chart = GrantChart.instance();
 
         btnBox.getChildren().addAll(ShowReport.getInstance().build());
 
-        container.getChildren().addAll(btnBox, comboBox);
+        container.getChildren().addAll(btnBox, comboBox,changeServer());
         server.getObservers().addObserver(processTable);
 
         startBtn.setOnAction(e -> {
@@ -110,5 +116,37 @@ public class SayMyName {
 
         return pane;
     }
+
+    ComboBox<String> changeServer() {
+        String[] options = {"First Come First Served", "Priority Preemptive", "Priority Non-Preemptive",
+                "Shortest Job First Nob-Preemptive", "Shortest Job First Preemptive", "Round robin"};
+
+        // Create a ComboBox with the list of options
+        ComboBox<String> comboBox = new ComboBox<>(FXCollections.observableArrayList(options));
+
+        // Set the default value for the ComboBox
+        comboBox.setValue("change the scheduler");
+
+        // Add an event handler to the ComboBox
+        comboBox.setOnAction(event -> {
+            // Get the selected item from the ComboBox
+            String selectedOption = comboBox.getValue();
+
+            // Perform an action based on the selected item
+            switch (selectedOption) {
+                case "First Come First Served" -> server = new NonPreemptiveServer(new FirstComeFirstServed());
+                case "Priority Preemptive" -> server = new PreemptiveServer(new PriorityScheduler());
+                case "Priority Non-Preemptive" -> server = new NonPreemptiveServer(new PriorityScheduler());
+                case "Shortest Job First Nob-Preemptive" ->
+                        server = new NonPreemptiveServer(new ShortestJobFirstScheduler());
+                case "Shortest Job First Preemptive" -> server = new PreemptiveServer(new ShortestJobFirstScheduler());
+                case "Round robin" -> server = new RoundRobinServer(new RoundRobin());
+            }
+            new SayMyName(server);
+            stage.hide();
+        });
+        return comboBox;
+    }
+
 
 }

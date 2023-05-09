@@ -128,7 +128,11 @@ public abstract class Server implements Runnable {
     }
 
     public abstract void serve();
-
+    public void delete(){
+        while (!scheduler.isEmpty()){
+            scheduler.pop();
+        }
+    }
     @Override
     public void run() {
     }
