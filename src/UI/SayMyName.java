@@ -84,7 +84,7 @@ public class SayMyName {
     void buildScene() {
         Scene newScene = new Scene(this.root);
         stage.setScene(newScene);
-        stage.setTitle("New Stage");
+        stage.setTitle(server.getClass().getSimpleName()+" "+ server.getScheduler().getClass().getSimpleName());
         stage.show();
     }
 
@@ -143,7 +143,8 @@ public class SayMyName {
                 case "Round robin" -> server = new RoundRobinServer(new RoundRobin());
             }
             new SayMyName(server);
-            stage.hide();
+            GrantChart.instance().setSpeed(1000);
+             stage.hide();
         });
         return comboBox;
     }

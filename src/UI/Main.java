@@ -71,7 +71,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        stage.setTitle("Radio Button Example");
+        stage.setTitle("OS-Scheduler");
         stage.show();
     }
 
